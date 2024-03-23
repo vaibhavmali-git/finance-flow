@@ -47,7 +47,6 @@ function Dashboard() {
       tag: values.tag,
       name: values.name,
     };
-    console.log(newTransaction);
     addTransaction(newTransaction);
   };
 
@@ -57,7 +56,6 @@ function Dashboard() {
         collection(db, `users/${user.uid}/transactions`),
         transaction
       );
-      console.log("Document written with ID: ", docRef.id);
       if (!many) toast.success("Transaction Added!");
       let newArr = transactions;
       newArr.push(transaction);
@@ -105,7 +103,6 @@ function Dashboard() {
         transactionArray.push(doc.data());
       });
       setTransactions(transactionArray);
-      console.log("Transactions Array", transactionArray);
       toast.success("Transactions Fetched!");
     }
     setLoading(false);
@@ -114,14 +111,12 @@ function Dashboard() {
     try {
       // Retrieve all documents in the collection
       const querySnapshot = await getDocs(collection(db, `users/${user.uid}/transactions`));
-  
       // Delete each document in the collection
       querySnapshot.forEach(async (doc) => {
         await deleteDoc(doc.ref);
       });
   
       // Notify user and update state if needed
-    
       setIncome(0);
       setExpense(0);
       setTotalBalance(0);
@@ -130,8 +125,7 @@ function Dashboard() {
       fetchTransactions();
     } catch (error) {
       // Handle any errors
-      console.error("Error resetting balance:", error);
-      toast.error("Failed to reset balance");
+      toast.error(error.message);
     }
   };
   
